@@ -1,0 +1,59 @@
+services:
+    app:
+        build:
+            args:
+                user: sammy
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: ksf
+        container_name: ksf-app
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        networks:
+            - ksf
+
+    db:
+        image: mysql:8.0
+        container_name: ksf-db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: db-ksf
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_PASSWORD: user
+            MYSQL_USER: user
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+            MYSQL_ALLOW_EMPTY_PASSWORD: true
+            MYSQL_RANDON_ROOT_PASSWORD:
+        volumes:
+            - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+        networks:
+            - ksf
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: ksf-phpmyadmin
+        ports:
+            - ${PHP_MY_ADMIN_PORT:-8001}:80
+        networks:
+            - ksf
+        depends_on:
+            - db
+
+    nginx:
+        image: nginx:alpine
+        container_name: ksf-nginx
+        restart: unless-stopped
+        ports:
+            - 8000:80
+        volumes:
+            - ./:/var/www
+            - ./docker-compose/nginx:/etc/nginx/conf.d/
+        networks:
+            - ksf
+
+networks:
+    ksf:
+        driver: bridge

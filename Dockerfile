@@ -1,8 +1,8 @@
 FROM php:8.2-fpm
 
 # Arguments defined in docker-compose.yml
-ARG user
-ARG uid
+ARG user=sammy
+ARG uid=1000
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -41,4 +41,12 @@ WORKDIR /var/www
 
 USER $user
 
+# RUN docker exec -it 
+
+# RUN docker exec -it ksf-app php artisan migrate
+
+# RUN docker exec app php artisan migrate
+# CMD sh app composer install --no-interaction
+# CMD sh app php artisan migrate
+# CMD sh app php artisan serve
 # CMD sh php artisan migrate --seed

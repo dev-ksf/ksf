@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 
 #enable header mod in apache2 to support CORS (for dev mode in Vite)             
 #finish the configurarion for virtual host in Apache 
-RUN a2enmod headers
+# RUN a2enmod headers
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -40,3 +40,5 @@ WORKDIR /var/www
 # RUN npm install
 
 USER $user
+
+# CMD sh php artisan migrate --seed

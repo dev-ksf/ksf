@@ -36,7 +36,7 @@ services:
         image: phpmyadmin
         container_name: ksf-phpmyadmin
         ports:
-            - ${PHP_MY_ADMIN_PORT:-8001}:80
+            - ${PHP_MY_ADMIN_PORT:-8001}:90
         networks:
             - ksf
         depends_on:
@@ -47,7 +47,7 @@ services:
         container_name: ksf-nginx
         restart: unless-stopped
         ports:
-            - 8000:80
+            - 8000:90
         volumes:
             - ./:/var/www
             - ./docker-compose/nginx:/etc/nginx/conf.d/
